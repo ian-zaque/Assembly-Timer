@@ -26,18 +26,18 @@
     ```
 
 2. Compile e monte o arquivo 'display.s'.
-  * Com makefile
-    ```sh
-        something here
-    ```
+    * Com makefile
+        ```sh
+            something here
+        ```
 
-  * Sem makefile
-    ```sh
-        as -o display.o display.s
-    ```
-    ```sh
-        ld -o display display.o
-    ```
+    * Sem makefile
+        ```sh
+            as -o display.o display.s
+        ```
+        ```sh
+            ld -o display display.o
+        ```
 
 3. Execute o arquivo montado.
     ```sh
