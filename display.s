@@ -556,6 +556,7 @@ _start:
         resetNumber:
             MOV R11, #0b1001	@DEZENA
             MOV R12, #0b1001	@UNIDADE
+            B before
 
 _end:
         MOV R7,#1
