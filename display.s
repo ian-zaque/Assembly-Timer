@@ -42,6 +42,15 @@
         STR R1, [R8, R2] @ save it to reg to do work
 .endm
 
+.macro GPIOReadRegister pin
+        MOV R2, R8
+        ADD R2, #level
+        LDR R2, [R2]
+        LDR R3, =\pin
+        ADD R3, #8
+        LDR R3, [R3]
+        AND R0, R2, R3
+.endm
 
 .macro GPIOTurnOn pin
         MOV R2, R8 @ address of gpio regs
@@ -383,163 +392,170 @@ _start:
 	display
 	entrySetMode
 	
-	writeNUll
-	
-	@initialValues				@Seta #99 em R11 R12
-	MOV R11, #0b1001	@DEZENA
-	MOV R12, #0b1001	@UNIDADE
+    before:
+        GPIOReadRegister pinB19
+        CMP r0, r3
+        BNE timer
+        B before
 
-	loop:		
-		checkDezena:
-			CMP R11, #0b1001	@Se Dezena for 9
-			BEQ dezena9
-			CMP R11, #0b1000	@Se Dezena for 8
-			BEQ dezena8
-			CMP R11, #0b0111	@Se Dezena for 7
-			BEQ dezena7
-			CMP R11, #0b0110	@Se Dezena for 6
-			BEQ dezena6
-			CMP R11, #0b0101	@Se Dezena for 5
-			BEQ dezena5
-			CMP R11, #0b0100	@Se Dezena for 4
-			BEQ dezena4
-			CMP R11, #0b0011	@Se Dezena for 3
-			BEQ dezena3
-			CMP R11, #0b0010	@Se Dezena for 2
-			BEQ dezena2
-			CMP R11, #0b0001	@Se Dezena for 1
-			BEQ dezena1
-			CMP R11, #0b0000	@Se Dezena for 0
-			BNE subtrDezena
-			BEQ dezena0
-	
-		checkUnidade:
-			CMP R12, #0b1001	@Se UNIDADE for 9
-			BEQ unidade9
-			CMP R12, #0b1000	@Se UNIDADE for 8
-			BEQ unidade8
-			CMP R12, #0b0111	@Se UNIDADE for 7
-			BEQ unidade7
-			CMP R12, #0b0110	@Se UNIDADE for 6
-			BEQ unidade6
-			CMP R12, #0b0101	@Se UNIDADE for 5
-			BEQ unidade5
-			CMP R12, #0b0100	@Se UNIDADE for 4
-			BEQ unidade4
-			CMP R12, #0b0011	@Se UNIDADE for 3
-			BEQ unidade3
-			CMP R12, #0b0010	@Se UNIDADE for 2
-			BEQ unidade2
-			CMP R12, #0b0001	@Se UNIDADE for 1
-			BEQ unidade1
-			CMP R12, #0b0000	@Se UNIDADE for 0
-			BEQ unidade0
-			BNE loop
-	
-	subtrDezena:
-		SUB R11, #0b0001
-		MOV R12, #0b1001
-		B checkUnidade
-	
-	dezena9:
-		displayClear
-		write_9
-		B checkUnidade
-	dezena8:
-		displayClear
-		write_8
-		B checkUnidade
-	dezena7:
-		displayClear
-		write_7
-		B checkUnidade
-	dezena6:
-		displayClear
-		write_6
-		B checkUnidade
-	dezena5:
-		displayClear
-		write_5
-		B checkUnidade
-	dezena4:
-		displayClear
-		write_4
-		B checkUnidade
-	dezena3:
-		displayClear
-		write_3
-		B checkUnidade
-	dezena2:
-		displayClear
-		write_2
-		B checkUnidade
-	dezena1:
-		displayClear
-		write_1
-		B checkUnidade
-	dezena0:
-		displayClear
-		write_0
-		B checkUnidade
-	
-	
-	unidade9:
-		write_9
-		sleep
-		SUB R12, #0b0001
-		B checkDezena
-	unidade8:
-		write_8
-		sleep
-		SUB R12, #0b0001
-		B checkDezena
-	unidade7:
-		write_7
-		sleep
-		SUB R12, #0b0001
-		B checkDezena
-	unidade6:
-		write_6
-		sleep
-		SUB R12, #0b0001
-		B checkDezena
-	unidade5:
-		write_5
-		sleep
-		SUB R12, #0b0001
-		B checkDezena
-	unidade4:
-		write_4
-		sleep
-		SUB R12, #0b0001
-		B checkDezena
-	unidade3:
-		write_3
-		sleep
-		SUB R12, #0b0001
-		B checkDezena
-	unidade2:
-		write_2
-		sleep
-		SUB R12, #0b0001
-		B checkDezena
-	unidade1:
-		write_1
-		sleep
-		SUB R12, #0b0001
-		B checkDezena
-	unidade0:
-		CMP R11, #0b0000
-		BEQ resetNumber
-		write_0
-		sleep
-		MOV R12, #0b1001
-		SUB R11, #0b0001
-		B checkDezena
+    timer:
+        writeNUll
+        
+        @initialValues				@Seta #99 em R11 R12
+        MOV R11, #0b1001	@DEZENA
+        MOV R12, #0b1001	@UNIDADE
 
-	resetNumber:
-		MOV R11, #0b1001	@DEZENA
-		MOV R12, #0b1001	@UNIDADE
+        loop:		
+            checkDezena:
+                CMP R11, #0b1001	@Se Dezena for 9
+                BEQ dezena9
+                CMP R11, #0b1000	@Se Dezena for 8
+                BEQ dezena8
+                CMP R11, #0b0111	@Se Dezena for 7
+                BEQ dezena7
+                CMP R11, #0b0110	@Se Dezena for 6
+                BEQ dezena6
+                CMP R11, #0b0101	@Se Dezena for 5
+                BEQ dezena5
+                CMP R11, #0b0100	@Se Dezena for 4
+                BEQ dezena4
+                CMP R11, #0b0011	@Se Dezena for 3
+                BEQ dezena3
+                CMP R11, #0b0010	@Se Dezena for 2
+                BEQ dezena2
+                CMP R11, #0b0001	@Se Dezena for 1
+                BEQ dezena1
+                CMP R11, #0b0000	@Se Dezena for 0
+                BNE subtrDezena
+                BEQ dezena0
+        
+            checkUnidade:
+                CMP R12, #0b1001	@Se UNIDADE for 9
+                BEQ unidade9
+                CMP R12, #0b1000	@Se UNIDADE for 8
+                BEQ unidade8
+                CMP R12, #0b0111	@Se UNIDADE for 7
+                BEQ unidade7
+                CMP R12, #0b0110	@Se UNIDADE for 6
+                BEQ unidade6
+                CMP R12, #0b0101	@Se UNIDADE for 5
+                BEQ unidade5
+                CMP R12, #0b0100	@Se UNIDADE for 4
+                BEQ unidade4
+                CMP R12, #0b0011	@Se UNIDADE for 3
+                BEQ unidade3
+                CMP R12, #0b0010	@Se UNIDADE for 2
+                BEQ unidade2
+                CMP R12, #0b0001	@Se UNIDADE for 1
+                BEQ unidade1
+                CMP R12, #0b0000	@Se UNIDADE for 0
+                BEQ unidade0
+                BNE loop
+        
+        subtrDezena:
+            SUB R11, #0b0001
+            MOV R12, #0b1001
+            B checkUnidade
+        
+        dezena9:
+            displayClear
+            write_9
+            B checkUnidade
+        dezena8:
+            displayClear
+            write_8
+            B checkUnidade
+        dezena7:
+            displayClear
+            write_7
+            B checkUnidade
+        dezena6:
+            displayClear
+            write_6
+            B checkUnidade
+        dezena5:
+            displayClear
+            write_5
+            B checkUnidade
+        dezena4:
+            displayClear
+            write_4
+            B checkUnidade
+        dezena3:
+            displayClear
+            write_3
+            B checkUnidade
+        dezena2:
+            displayClear
+            write_2
+            B checkUnidade
+        dezena1:
+            displayClear
+            write_1
+            B checkUnidade
+        dezena0:
+            displayClear
+            write_0
+            B checkUnidade
+        
+        
+        unidade9:
+            write_9
+            sleep
+            SUB R12, #0b0001
+            B checkDezena
+        unidade8:
+            write_8
+            sleep
+            SUB R12, #0b0001
+            B checkDezena
+        unidade7:
+            write_7
+            sleep
+            SUB R12, #0b0001
+            B checkDezena
+        unidade6:
+            write_6
+            sleep
+            SUB R12, #0b0001
+            B checkDezena
+        unidade5:
+            write_5
+            sleep
+            SUB R12, #0b0001
+            B checkDezena
+        unidade4:
+            write_4
+            sleep
+            SUB R12, #0b0001
+            B checkDezena
+        unidade3:
+            write_3
+            sleep
+            SUB R12, #0b0001
+            B checkDezena
+        unidade2:
+            write_2
+            sleep
+            SUB R12, #0b0001
+            B checkDezena
+        unidade1:
+            write_1
+            sleep
+            SUB R12, #0b0001
+            B checkDezena
+        unidade0:
+            CMP R11, #0b0000
+            BEQ resetNumber
+            write_0
+            sleep
+            MOV R12, #0b1001
+            SUB R11, #0b0001
+            B checkDezena
+
+        resetNumber:
+            MOV R11, #0b1001	@DEZENA
+            MOV R12, #0b1001	@UNIDADE
 
 _end:
         MOV R7,#1
@@ -557,8 +573,7 @@ timespecsec:
 	.word 300000000
 
 fileName: .asciz "/dev/mem"
-gpioaddr: .word 0x20200
-@ LCD
+gpioaddr: .word 0x20200         @GPIO Base Address
 
 pinRS:	@ LCD Display RS pin - GPIO25
 	.word 8 @ offset to select register
@@ -589,3 +604,13 @@ pinDB7:	@ LCD Display DB7 pin - GPIO21
 	.word 8 @ offset to select register
 	.word 3 @ bit offset in select register
 	.word 21 @ bit offset in set & clr register
+
+pinB19: @ LCD Display B19 button pin - GPIO19
+    .word 4
+    .word 27
+    .word 524288
+
+pinB26:  @ LCD Display B26 button pin - GPIO26
+    .word 8
+    .word 18
+    .word 67108864
