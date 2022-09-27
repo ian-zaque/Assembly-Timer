@@ -11,7 +11,7 @@
 ### Máquina
 
 1. Hardware:
-  - Raspberry Pi Zero W;
+    - Raspberry Pi Zero W;
 2. Arquitetura Raspberry:
     - ARMv6;
 3. Linguagem de programação: 
@@ -21,19 +21,23 @@
 ### Instruções
 
 1. Clone o repositório.
-   ```sh
-   git clone https://github.com/ian-zaque/pbl_SD_1.git
-   ```
+    ```sh
+    git clone https://github.com/ian-zaque/pbl_SD_1.git
+    ```
+
 2. Compile e monte o arquivo 'display.s'.
   * Com makefile
+    ```sh
+        something here
+    ```
 
   * Sem makefile
-   ```sh
-    as -o display.o display.s
-   ```
-   ```sh
-    ld -o display display.o
-   ```
+    ```sh
+        as -o display.o display.s
+    ```
+    ```sh
+        ld -o display display.o
+    ```
 
 3. Execute o arquivo montado.
     ```sh
