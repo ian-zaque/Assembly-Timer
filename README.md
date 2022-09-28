@@ -28,7 +28,7 @@
 2. Compile e monte o arquivo 'display.s'.
     * Com makefile
         ```sh
-            something here
+            make display
         ```
 
     * Sem makefile
