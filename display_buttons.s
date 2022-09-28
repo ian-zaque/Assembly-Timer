@@ -27,19 +27,19 @@
 .endm
 
 .macro GPIODirectionOut pin
-        LDR R2, =\pin
+        LDR R2, =\pin                   @ address of pin table
         LDR R2, [R2]
         LDR R1, [R8, R2]
-        LDR R3, =\pin @ address of pin table
-        ADD R3, #4 @ load amount to shift from table
-        LDR R3, [R3] @ load value of shift amt
-        MOV R0, #0b111 @ mask to clear 3 bits
-        LSL R0, R3 @ shift into position
-        BIC R1, R0 @ clear the three bits
-        MOV R0, #1 @ 1 bit to shift into pos
-        LSL R0, R3 @ shift by amount from table
-        ORR R1, R0 @ set the bit
-        STR R1, [R8, R2] @ save it to reg to do work
+        LDR R3, =\pin                   @ address of pin table
+        ADD R3, #4                      @ load amount to shift from table
+        LDR R3, [R3]                    @ load value of shift amt
+        MOV R0, #0b111                  @ mask to clear 3 bits
+        LSL R0, R3                      @ shift into position
+        BIC R1, R0                      @ clear the three bits
+        MOV R0, #1                      @ 1 bit to shift into pos
+        LSL R0, R3                      @ shift by amount from table
+        ORR R1, R0                      @ set the bit
+        STR R1, [R8, R2]                @ save it to reg to do work
 .endm
 
 .macro GPIOReadRegister pin
@@ -53,22 +53,22 @@
 .endm
 
 .macro GPIOTurnOn pin
-        MOV R2, R8 @ address of gpio regs
-        ADD R2, #setregoffset @ off to set reg
-        MOV R0, #1 @ 1 bit to shift into pos
-        LDR R3, =\pin @ base of pin info table
-        ADD R3, #8 @ add offset for shift amt
-        LDR R3, [R3] @ load shift from table
-        LSL R0, R3 @ do the shift
-        STR R0, [R2] @ write to the register
+        MOV R2, R8                      @ address of gpio regs
+        ADD R2, #setregoffset           @ off to set reg
+        MOV R0, #1                      @ 1 bit to shift into pos
+        LDR R3, =\pin                   @ base of pin info table
+        ADD R3, #8                      @ add offset for shift amt
+        LDR R3, [R3]                    @ load shift from table
+        LSL R0, R3                      @ do the shift
+        STR R0, [R2]                    @ write to the register
 .endm
 
 
 .macro GPIOTurnOff pin
-        MOV R2, R8 @ address of gpio regs
-        ADD R2, #clrregoffset @ off set of clr reg
-        MOV R0, #1 @ 1 bit to shift into pos
-        LDR R3, =\pin @ base of pin info table
+        MOV R2, R8                      @ address of gpio regs
+        ADD R2, #clrregoffset           @ off set of clr reg
+        MOV R0, #1                      @ 1 bit to shift into pos
+        LDR R3, =\pin                   @ base of pin info table
         ADD R3, #8
         LDR R3, [R3]
         LSL R0, R3
@@ -176,14 +176,14 @@
 .macro write_0
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                     @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                     @Bloco define linha na tabela de dígitos do display      0b0000 - Linha 1
         GPIOTurnOff pinDB5
         GPIOTurnOff pinDB4
         enable
@@ -192,14 +192,14 @@
 .macro write_1
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define linha na tabela de dígitos do display      0b0001 - Linha 2
         GPIOTurnOff pinDB5
         GPIOTurnOn pinDB4
         enable
@@ -208,14 +208,14 @@
 .macro write_2
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define linha na tabela de dígitos do display      0b0010 - Linha 3
         GPIOTurnOn pinDB5
         GPIOTurnOff pinDB4
         enable
@@ -224,14 +224,14 @@
 .macro write_3
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define linha na tabela de dígitos do display      0b0011 - Linha 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
@@ -240,14 +240,14 @@
 .macro write_4
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOn pinDB6
+        GPIOTurnOn pinDB6                       @Bloco define linha na tabela de dígitos do display      0b0100 - Linha 5
         GPIOTurnOff pinDB5
         GPIOTurnOff pinDB4
         enable
@@ -256,14 +256,14 @@
 .macro write_5
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                     @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOn pinDB6
+        GPIOTurnOn pinDB6                       @Bloco define linha na tabela de dígitos do display      0b0101 - Linha 6
         GPIOTurnOff pinDB5
         GPIOTurnOn pinDB4
         enable
@@ -272,14 +272,14 @@
 .macro write_6
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOn pinDB6
+        GPIOTurnOn pinDB6                       @Bloco define linha na tabela de dígitos do display      0b0110 - Linha 7
         GPIOTurnOn pinDB5
         GPIOTurnOff pinDB4
         enable
@@ -288,14 +288,14 @@
 .macro write_7
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOn pinDB6
+        GPIOTurnOn pinDB6                       @Bloco define linha na tabela de dígitos do display      0b0111 - Linha 8
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
@@ -304,14 +304,14 @@
 .macro write_8
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOn pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define linha na tabela de dígitos do display      0b1000 - Linha 9
         GPIOTurnOff pinDB5
         GPIOTurnOff pinDB4
         enable
@@ -320,39 +320,23 @@
 .macro write_9
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
         
         GPIOTurnOn pinRS
         GPIOTurnOn pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define linha na tabela de dígitos do display      0b1001 - Linha 9
         GPIOTurnOff pinDB5
         GPIOTurnOn pinDB4
-        enable
-.endm
-
-.macro cursorBack
-	GPIOTurnOff pinRS
-        GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
-        GPIOTurnOff pinDB5
-        GPIOTurnOn pinDB4
-        enable
-
-        GPIOTurnOff pinRS
-        GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
-        GPIOTurnOff pinDB5
-        GPIOTurnOff pinDB4
         enable
 .endm
 
 .macro writeNUll
 	GPIOTurnOn pinRS
         GPIOTurnOff pinDB7
-        GPIOTurnOff pinDB6
+        GPIOTurnOff pinDB6                      @Bloco define coluna na tabela de dígitos do display     0b0011 - Coluna 4
         GPIOTurnOn pinDB5
         GPIOTurnOn pinDB4
         enable
@@ -394,16 +378,16 @@ _start:
 	
     before:
         GPIOReadRegister pinB19
-        CMP r0, r3              @Se B19 
-        BNE timer
-        B before
+        CMP r0, r3                      @Verifica se B19 pressionado
+        BNE timer                       @Se sim, BRANCH timer
+        B before                        @BRANCH before
 
     timer:
         writeNUll
 
-        @initialValues				@Seta #99 em R11 R12
-        MOV R11, #0b1001	@DEZENA
-        MOV R12, #0b1001	@UNIDADE
+        @initialValues			@Seta #99 em R11 R12
+        MOV R11, #0b1001	        @DEZENA
+        MOV R12, #0b1001	        @UNIDADE
 
         loop:
             checkDezena:
